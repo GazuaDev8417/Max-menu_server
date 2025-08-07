@@ -11,23 +11,7 @@ const PORT = process.env.PORT || 3003
 export const app = express()
 app.use(express.json())
 //app.use(cookieParser())
-const allowedOrigins = ['https://admuser.onrender.com', 'https://max-menu.vercel.app'];
-
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Não permitido pelo CORS'));
-    }
-  },
-  credentials: true
-}))
-
-app.options('*', cors({
-  origin: allowedOrigins,
-  credentials: true
-}))
+app.use(cors())
 
 
 
