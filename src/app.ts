@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express'
 import express from 'express'
 import cors from 'cors'
 import { config } from 'dotenv'
@@ -31,6 +32,11 @@ app.options('*', cors({
   credentials: true
 }))
 
+
+app.use((err:any, req:Request, res:Response, next:NextFunction) => {
+  console.error('Erro capturado:', err)
+  res.status(500).json({ message: 'Erro interno do servidor', error: err.message })
+})
 
 
 app.listen(PORT, ()=>{
