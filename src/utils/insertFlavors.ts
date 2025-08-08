@@ -4,15 +4,18 @@ import { v4 } from "uuid"
 
 
 const flavors =  [
-                    { flavor: 'CAMARÃO', price: '+ R$ 6,00', max_quantity: 10 }
+                    { flavor: 'PIRÃO', ingredients: 'Salada, Calabresa, Carne de Sol e Camarão', price: 'R$ 35,00', max_quantity: 10}, 
+                    { flavor: 'PIRÃO DE AIPIM - SÓ CAMARÃO', ingredients: 'Pirão, Camarão e Salada Tamanho M', price: 'R$ 35,00', max_quantity: 10 }, 
+                    { flavor: 'PIRÃO DE AIPIM - SÓ CAMARÃO', ingredients: 'Pirão, Camarão e Salada Tamanho G', price: 'R$ 47,00', max_quantity: 10 }, 
+                    { flavor: 'PIRÃO MEDIO COM CAMARÃO', ingredients: 'Salada, Calabresa, Carne de sol e Camarão', price: 'R$ 25,00', max_quantity: 10 }
                 ]
 
 const insertFlavors = async()=>{
-    const step = 3
+    const step = 1
     /* =========================ATENÇÃO============================================== */
-    const product_id = '86b3f68a-250e-48de-a1f3-f1dfb31cf4c5' /* ATENÇÃO MÁXIMA AQUI */
+    const product_id = '337f0b67-a902-40ac-9a20-073b0a34c679' /* ATENÇÃO MÁXIMA AQUI */
     /* =========================MUITA ATENÇÃO========================================== */
-    const subtitle = 'Escolha os Sabores'
+    const subtitle = 'Sabores Pirão'
     try{
         const data = flavors.map(f =>   ({
             id: v4(),
