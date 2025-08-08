@@ -49,6 +49,7 @@ export default class DatabaseManager extends Connexion{
                     table.integer('max_quantity').notNullable()
                     table.decimal('total', 10, 2)
                     table.string('product_id', 36).notNullable()
+                    table.integer('step').notNullable()
                     table.integer('quantity').notNullable()
                     table.string('subtitle', 39)
                 })
