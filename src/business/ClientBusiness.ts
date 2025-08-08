@@ -107,4 +107,8 @@ export default class ClientBusiness{
         
         return groupedOrders
     }
+
+    removeClientOrder = async(id:string):Promise<void>=>{
+        await this.clientData.removeClientOrder(id)
+    }
 }

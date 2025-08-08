@@ -95,4 +95,19 @@ export default class ClientController{
             res.status(statusCode).send(message || e.sqlMessage)
         }
     }
+
+    removeClientOrder = async(req:Request, res:Response):Promise<void>=>{
+        try{
+
+            const id = req.params.id
+
+            await this.clientBusiness.removeClientOrder(id)
+
+            res.status(200).end()
+        }catch(e:any){
+            let statusCode = e.statusCode || 400
+            let message = e.error === undefined ? e.message : e.error.message
+            res.status(statusCode).send(message || e.sqlMessage)
+        }
+    }
 }

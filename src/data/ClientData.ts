@@ -79,6 +79,18 @@ export default class ClientData extends Connexion{
 
         return clients
     }
+
+    removeClientOrder = async(id:string):Promise<void>=>{
+        try{
+
+            await Connexion.con(this.CLIENT_TABLE)
+                .del()
+                .where({ id })
+                
+        }catch(e:any){
+            throw new Error(e.message || e)
+        }
+    }
 }
 
 
