@@ -8,15 +8,15 @@ config()
 
 export default abstract class Connexion{
     public static con = knex({
-        /* client: 'pg',
-        connection: process.env.maxmenu_neondb */
-        client: 'mysql2',
+        client: 'pg',
+        connection: process.env.maxmenu_neondb
+        /* client: 'mysql2',
         connection: {
             host: 'localhost',
             user: 'root',
             password: 'alfadb',
             database: 'max_menu'
-        }
+        } */
     })
 
     public static testConnexion = async():Promise<void>=>{

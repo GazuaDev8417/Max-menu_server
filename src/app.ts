@@ -16,7 +16,7 @@ const allowedOrigins = [
   'http://10.23.1.19:5500',
   'https://max-menu.vercel.app',
   'https://admuser.onrender.com'
-] // coloque todos os que usa
+]
 
 app.use(cors({
   origin: (origin, callback) => {
