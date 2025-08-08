@@ -38,7 +38,7 @@ app.use((err:any, req:Request, res:Response, next:NextFunction) => {
   res.status(500).json({ message: 'Erro interno do servidor', error: err.message })
 })
 
-
+/* 
 app.listen(PORT, ()=>{
     console.log('Servidor rodando em http://localhost:3003')
-})
+}) */
