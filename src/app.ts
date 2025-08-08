@@ -15,10 +15,12 @@ const allowedOrigins = ['https://admuser.onrender.com', 'https://max-menu.vercel
 
 app.use(cors({
   origin: (origin, callback) => {
+    console.log("CORS Origin:", origin);
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Não permitido pelo CORS'));
+        console.error("Origem não permitida pelo CORS:", origin)
+        callback(null, false);
     }
   },
   credentials: true
