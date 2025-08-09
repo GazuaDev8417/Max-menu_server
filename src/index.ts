@@ -1,5 +1,4 @@
 import { app } from "./app"
-
 import ProductBusiness from "./business/ProductBusiness"
 import ProductController from "./controllers/ProductController"
 import ProductData from "./data/ProductData"
