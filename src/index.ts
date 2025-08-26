@@ -52,6 +52,8 @@ app.get('/client/lastorder', clientController.clientLastOrder)
 app.get('/step-qnt_max/:id', productCntroller.verifyMaxQnt)
 app.get('/product/:id', productCntroller.getProductById)
 app.get('/products/', productCntroller.getAllProducts)
+app.get('/products/cart', productCntroller.getCartByClient)
+
 
 app.get('/clients/cart/', cartController.getCartFromClient)
 app.get('/clients/orders', clientController.clientsWithOrders)

@@ -3,7 +3,7 @@ import ProductData from "../data/ProductData"
 import Product from "../model/Product"
 import ProductCart from "../model/Product_cart"
 import { v4 } from "uuid"
-import { ProductModel, FlavorModel } from "../model/InterfacesAndTypes"
+import { ProductModel, ProductCartModel, FlavorModel } from "../model/InterfacesAndTypes"
 import Authentication from "../services/Authentication"
 
 
@@ -79,6 +79,15 @@ export default class ProductBusiness{
 
         await this.productData.insertInProductCart(newProdctCart)
     }
+
+    getCartByClient = async(req:Request):Promise<ProductCartModel[]>=>{
+        const token = req.headers.authorization
+        const userId = new Authentication().tokenData(token as string).userId
+
+        const products = await this.productData.getCartByClient(userId)
+
+        return products
+    } 
 
 
     getProductById = async(req:Request):Promise<ProductModel>=>{
