@@ -12,7 +12,7 @@ export default class ClientData extends Connexion{
 
 
 
-    registClient = async(client:Client):Promise<void>=>{
+    /* registClient = async(client:Client):Promise<void>=>{
         try{
 
             await client.save()
@@ -20,7 +20,7 @@ export default class ClientData extends Connexion{
         }catch(e:any){
             throw new Error(e.message || e)
         }
-    }
+    } */
 
     registUser = async(user:AdmUser):Promise<void>=>{
         try{
@@ -49,6 +49,18 @@ export default class ClientData extends Connexion{
 
             const [user] = await Connexion.con(this.ADMUSER_TABLE)
                 .where({ phone })
+
+            return user
+        }catch(e:any){
+            throw new Error(e.message || e)
+        }
+    }
+
+    userByPhoneAndEmail = async(phone:string, email:string):Promise<UserModel>=>{
+        try{
+
+            const [user] = await Connexion.con(this.ADMUSER_TABLE)
+                .where({ phone, email })
 
             return user
         }catch(e:any){

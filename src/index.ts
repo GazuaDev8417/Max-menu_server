@@ -41,7 +41,7 @@ app.post('/insert_in_cart', cartController.insertInCart)
 app.post('/cart_product', cartController.checkProductsFromCart)
 
 
-app.post('/regist/client', clientController.registClient)
+//app.post('/regist/client', clientController.registClient)
 app.post('/signup/user', clientController.registUser)
 app.post('/login/user', clientController.loginUser)
 

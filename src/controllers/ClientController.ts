@@ -31,7 +31,7 @@ export default class ClientController{
         }
     }
 
-    registClient = async(req:Request, res:Response):Promise<void>=>{
+    /* registClient = async(req:Request, res:Response):Promise<void>=>{
         try{
 
             await this.clientBusiness.registClient(req)
@@ -42,7 +42,7 @@ export default class ClientController{
             let message = e.error === undefined ? e.message : e.error.message
             res.status(statusCode).send(message || e.sqlMessage)
         }
-    }
+    } */
 
     registUser = async(req:Request, res:Response):Promise<void>=>{
         try{

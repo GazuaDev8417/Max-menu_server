@@ -14,7 +14,7 @@ export default class ClientBusiness{
     ){}
 
 
-    registClient = async(req:Request):Promise<void>=>{
+    /* registClient = async(req:Request):Promise<void>=>{
         const token = req.headers.authorization
         const id = new Authentication().tokenData(token as string).userId
         const { pedido } = req.body
@@ -22,11 +22,11 @@ export default class ClientBusiness{
         const newClient = new Client(v4(), pedido)
         
         await this.clientData.registClient(newClient)
-        /* HÁ UM COMPLEMENTO AQUI QUE PRECISA SER LEMBRADO */
-    }
+        HÁ UM COMPLEMENTO AQUI QUE PRECISA SER LEMBRADO
+    } */
 
     registUser = async(req:Request):Promise<string>=>{
-        const { user, phone, password, role } = req.body
+        const { user, email, phone, password, role } = req.body
         
         const id = v4()
         const token = new Authentication().token(id)
@@ -34,10 +34,19 @@ export default class ClientBusiness{
         const newUser = new AdmUser(
             id,
             user,
+            email,
             phone,
             hash,
             role
         )
+
+        const existingUser = await this.clientData.userByPhoneAndEmail(phone, email)
+        if(existingUser){
+            throw{
+                statuCode: 403,
+                error: new Error('Cliente já cadastrado')
+            }
+        }
 
         await this.clientData.registUser(newUser)
 
