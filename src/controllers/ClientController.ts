@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import ClientBusiness from "../business/ClientBusiness"
-import Authentication from "../services/Authentication"
+//import Authentication from "../services/Authentication"
 
 
 
@@ -11,12 +11,12 @@ export default class ClientController{
         private clientBusiness:ClientBusiness
     ){}
 
-    generateUserId = (req:Request, res:Response): void => {
+    /* generateUserId = (req:Request, res:Response): void => {
         const userId = crypto.randomUUID()
         const token = new Authentication().token(userId)
 
         res.status(200).send(token)
-    }
+    } */
 
     clientByPhone = async(req:Request, res:Response):Promise<void>=>{
         try{

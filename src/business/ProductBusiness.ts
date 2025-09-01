@@ -104,10 +104,10 @@ export default class ProductBusiness{
     }
 
     flavorsByProduct = async(req:Request):Promise<{flavors: FlavorModel[], maxStep: number, total_quantity:number }>=>{
-        const token = req.headers.authorization
-        const client = new Authentication().tokenData(token as string).userId
+        /* const token = req.headers.authorization
+        const client = new Authentication().tokenData(token as string).userId */
         const { step } = req.body
-        const objectFlavors = await this.productData.flavorsByProduct(req.params.id, step, client)
+        const objectFlavors = await this.productData.flavorsByProduct(req.params.id, step/* , client */)
         const flavors = objectFlavors.flavors
         const maxStep = objectFlavors.maxStep
         const total_quantity = objectFlavors.total_quantity

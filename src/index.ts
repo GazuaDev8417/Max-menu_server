@@ -45,7 +45,7 @@ app.post('/regist/client', clientController.registClient)
 app.post('/signup/user', clientController.registUser)
 app.post('/login/user', clientController.loginUser)
 
-app.get('/generate-user-id', clientController.generateUserId)
+//app.get('/generate-user-id', clientController.generateUserId)
 app.get('/client/lastorder', clientController.clientLastOrder)
 
 

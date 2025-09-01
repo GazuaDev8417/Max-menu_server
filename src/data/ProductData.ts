@@ -127,13 +127,14 @@ export default class ProductData extends Connexion{
     }
 
 
-    flavorsByProduct = async(productId:string, step:number, client:string):Promise<{flavors: FlavorModel[], maxStep: number, total_quantity:number }>=>{
+    flavorsByProduct = async(productId:string, step:number/* , client:string */):Promise<{flavors: FlavorModel[], maxStep: number, total_quantity:number }>=>{
         try{
+            
             const flavors = await Connexion.con(`${this.FLAVORS_TABLE} as f`)
-                .leftJoin(`${this.CART_TABLE} as c`, function(){
-                    this.on('c.flavor', '=', 'f.flavor')
-                        .andOn('c.step', '=', Connexion.con.raw('?', [step]))
-                        .andOn('c.client', '=', Connexion.con.raw('?', [client]))
+                .leftJoin(`${this.CART_TABLE} as c`, (join) =>{
+                    join.on('c.flavor', '=', 'f.flavor')
+                        .andOnVal('c.step', '=', step)
+                        /* .andOnVal('c.client', '=', client) */
                         .andOn('c.product_id', '=', 'f.product_id')
                 }).where('f.product_id', productId)
                     .andWhere('f.step', step)
@@ -143,15 +144,15 @@ export default class ProductData extends Connexion{
                         Connexion.con.raw('COALESCE(c.quantity, 0) as quantity'),
                         'f.product_id'
                     )
+                    
             const [{ maxStep }] = await Connexion.con(this.FLAVORS_TABLE)
                 .where({ product_id: productId })
                 .max({ maxStep: 'step' })
-            
+                
             const [{ total_quantity }] = await Connexion.con(this.FLAVORS_TABLE)
                 .where({ product_id: productId })
-                .sum({ total_quantity: 'quantity' })
+                .sum({ total_quantity: 'quantity' }) 
                 
-
             return {
                 flavors, 
                 maxStep: Number(maxStep) || 0,
