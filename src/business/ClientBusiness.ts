@@ -149,4 +149,10 @@ export default class ClientBusiness{
     removeClientOrder = async(id:string):Promise<void>=>{
         await this.clientData.removeClientOrder(id)
     }
+
+    deleteAccount = async(req:Request):Promise<void>=>{
+        const user = await new Authentication().authToken(req)
+        
+        await this.clientData.deleteAccount(user.id) 
+    }
 }

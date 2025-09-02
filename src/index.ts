@@ -80,4 +80,5 @@ app.delete('/product_cart/:id', cartController.removeFlavorFromCart)
 app.delete('/product/cart/:id', productCntroller.removeProductFromCart)
 app.delete('/product/client', productCntroller.removeProductFromCartByClient)
 app.delete('/client/order/:id', clientController.removeClientOrder)
+app.delete('/del-user', clientController.deleteAccount)
 

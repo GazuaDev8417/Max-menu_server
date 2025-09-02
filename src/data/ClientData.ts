@@ -105,6 +105,10 @@ export default class ClientData extends Connexion{
         }
     }
 
+    updateClientData = async(id:string):Promise<void>=>{
+        
+    }
+
     clientLastOrder = async():Promise<number>=>{
         try{
 
@@ -135,6 +139,14 @@ export default class ClientData extends Connexion{
                 .del()
                 .where({ id })
                 
+        }catch(e:any){
+            throw new Error(e.message || e)
+        }
+    }
+
+    deleteAccount = async(id:string):Promise<void>=>{
+        try{
+            await Connexion.con(this.ADMUSER_TABLE).del().where({ id })
         }catch(e:any){
             throw new Error(e.message || e)
         }

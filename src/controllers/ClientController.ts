@@ -134,4 +134,17 @@ export default class ClientController{
             res.status(statusCode).send(message || e.sqlMessage)
         }
     }
+
+    deleteAccount = async(req:Request, res:Response):Promise<void>=>{
+        try{
+
+            await this.clientBusiness.deleteAccount(req)
+
+            res.status(200).end()
+        }catch(e:any){
+            let statusCode = e.statusCode || 400
+            let message = e.error === undefined ? e.message : e.error.message
+            res.status(statusCode).send(message || e.sqlMessage)
+        }
+    }
 }
