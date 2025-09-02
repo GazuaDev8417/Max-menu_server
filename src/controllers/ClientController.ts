@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import ClientBusiness from "../business/ClientBusiness"
-//import Authentication from "../services/Authentication"
+import { UserModel } from "../model/InterfacesAndTypes"
 
 
 
@@ -18,7 +18,7 @@ export default class ClientController{
         res.status(200).send(token)
     } */
 
-    clientByPhone = async(req:Request, res:Response):Promise<void>=>{
+    /* clientByPhone = async(req:Request, res:Response):Promise<void>=>{
         try{
 
             const client = await this.clientBusiness.clientByPhone(req)
@@ -29,7 +29,7 @@ export default class ClientController{
             let message = e.error === undefined ? e.message : e.error.message
             res.status(statusCode).send(message || e.sqlMessage)
         }
-    }
+    } */
 
     /* registClient = async(req:Request, res:Response):Promise<void>=>{
         try{
@@ -63,6 +63,30 @@ export default class ClientController{
             const token = await this.clientBusiness.loginUser(req)
 
             res.status(200).send(token)
+        }catch(e:any){
+            let statusCode = e.statusCode || 400
+            let message = e.error === undefined ? e.message : e.error.message
+            res.status(statusCode).send(message || e.sqlMessage)
+        }
+    }
+
+    userById = async(req:Request, res:Response):Promise<void>=>{
+        try{
+            const user = await this.clientBusiness.userById(req)
+
+            res.status(200).send(user)
+        }catch(e:any){
+            let statusCode = e.statusCode || 400
+            let message = e.error === undefined ? e.message : e.error.message
+            res.status(statusCode).send(message || e.sqlMessage)
+        }
+    }
+
+    updateAddress = async(req:Request, res:Response):Promise<void>=>{
+        try{
+            await this.clientBusiness.updateAddress(req)
+
+            res.status(200).end()
         }catch(e:any){
             let statusCode = e.statusCode || 400
             let message = e.error === undefined ? e.message : e.error.message

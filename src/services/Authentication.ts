@@ -1,5 +1,8 @@
+import { Request } from 'express'
 import * as jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
+import ClientData from '../data/ClientData'
+import { UserModel } from '../model/InterfacesAndTypes'
 
 
 
@@ -37,18 +40,17 @@ export default class Authentication{
         return bcrypt.compareSync(txt, hash)
     }
 
-    /* authToken = async(req:Request):Promise<ClientModel>=>{
+    authToken = async(req:Request):Promise<UserModel>=>{
         const token = req.headers.authorization
-        
         const tokenData =  this.tokenData(token as string)
-        const user = await new ClientData().clientById(tokenData.payload)
+        const user = await new ClientData().userById(tokenData.userId)
         
         if(!user){
             throw{
                 statusCode: 404,
-                error: new Error('Usuário não encontrado')
+                error: new Error('Cliente não encontrado')
             }
         }    
         return user
-    } */
+    }
 }

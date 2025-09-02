@@ -42,11 +42,14 @@ app.post('/cart_product', cartController.checkProductsFromCart)
 
 
 //app.post('/regist/client', clientController.registClient)
-app.post('/signup/user', clientController.registUser)
-app.post('/login/user', clientController.loginUser)
+app.post('/user/signup', clientController.registUser)
+app.post('/user/login', clientController.loginUser)
+
+app.patch('/user/address', clientController.updateAddress)
 
 //app.get('/generate-user-id', clientController.generateUserId)
 app.get('/client/lastorder', clientController.clientLastOrder)
+app.get('/user', clientController.userById)
 
 
 app.get('/step-qnt_max/:id', productCntroller.verifyMaxQnt)

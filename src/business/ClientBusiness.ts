@@ -1,9 +1,9 @@
 import { Request } from "express"
-import Client from "../model/Client"
+//import Client from "../model/Client"
 import AdmUser from "../model/AdmUser"
 import ClientData from "../data/ClientData"
 import Authentication from "../services/Authentication"
-import { ClientModel, Order } from "../model/InterfacesAndTypes"
+import { Order, UserModel } from "../model/InterfacesAndTypes"
 import { v4 } from "uuid"
 
 
@@ -54,16 +54,16 @@ export default class ClientBusiness{
     }
     
     loginUser = async(req:Request):Promise<string>=>{
-        const { phone, password } = req.body
+        const { email, password } = req.body
         
-        if(!phone || !password){
+        if(!email || !password){
             throw{
                 statusCode: 401,
                 error: new Error('Preencha os campos')
             }
         }
 
-        const user = await this.clientData.userByPhone(phone)        
+        const user = await this.clientData.userByEmail(email)       
         if(!user){
             throw{
                 statusCode: 404,
@@ -83,7 +83,36 @@ export default class ClientBusiness{
         return token        
     }
 
-    clientByPhone = async(req:Request):Promise<ClientModel>=>{
+    userById = async(req:Request):Promise<UserModel>=>{
+        const user = await new Authentication().authToken(req)
+
+        if(!user){
+            throw{
+                statusCode: 404,
+                error: new Error('Cliente não encontrado')
+            }
+        }
+
+        return user
+    }
+
+    updateAddress = async(req:Request):Promise<void>=>{
+        const user = await new Authentication().authToken(req)
+        const { street, cep, neighbourhood, complement } = req.body
+
+        if(!street || !cep || !neighbourhood || !complement){
+            throw{
+                statusCode: 401,
+                error: new Error('Preencha todos os campos')
+            }
+        }
+
+        await this.clientData.updateAddress(
+            street, cep, neighbourhood, complement, user.id
+        )
+    }
+
+    /* clientByPhone = async(req:Request):Promise<ClientModel>=>{
         const { phone } = req.body
 
         if(!phone){
@@ -103,7 +132,7 @@ export default class ClientBusiness{
         }
 
         return client
-    }
+    } */
 
     clientLastOrder = async():Promise<number>=>{
         const lastOrder = await this.clientData.clientLastOrder()

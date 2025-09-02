@@ -39,6 +39,10 @@ export interface UserModel{
     phone:string
     password:string
     role:string
+    street:string
+    cep:string
+    neighbourhood:string
+    complement:string
 }
 
 export interface CartModel{
