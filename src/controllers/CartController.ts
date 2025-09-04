@@ -101,7 +101,7 @@ export default class CartController{
         }
     }
 
-    /* pay = async(req:Request, res:Response):Promise<void>=>{
+    pay = async(req:Request, res:Response):Promise<void>=>{
         try{
             const response = await this.cartBusiness.pay(req)
             res.status(200).json({
@@ -119,5 +119,5 @@ export default class CartController{
             let message = e.error === undefined ? e.message : e.error.message
             res.status(statusCode).send(message || e.sqlMessage)
         }
-    } */
+    }
 }

@@ -183,7 +183,7 @@ export default class CartBusiness{
         return products
     }
 
-    /* pay = async(req:Request)=>{
+    pay = async(req:Request)=>{
         try{
             const { paymentMethodId, email, token, items } = req.body
             const orderId = `${email}-${Date.now()}`
@@ -234,5 +234,5 @@ export default class CartBusiness{
                 error: e.message || 'Erro interno ao processar pagamento'
             }
         }     
-    }  */
+    }
 }

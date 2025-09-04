@@ -39,7 +39,7 @@ app.post('/products/cart', productCntroller.insertInProductCart)
 
 app.post('/insert_in_cart', cartController.insertInCart)
 app.post('/cart_product', cartController.checkProductsFromCart)
-//app.post('/pay', cartController.pay)
+app.post('/pay', cartController.pay)
 
 
 //app.post('/regist/client', clientController.registClient)
@@ -47,6 +47,7 @@ app.post('/user/signup', clientController.registUser)
 app.post('/user/login', clientController.loginUser)
 
 app.patch('/user/address', clientController.updateAddress)
+app.patch('/user', clientController.updateClientData)
 
 //app.get('/generate-user-id', clientController.generateUserId)
 app.get('/client/lastorder', clientController.clientLastOrder)

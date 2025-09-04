@@ -94,6 +94,18 @@ export default class ClientController{
         }
     }
 
+    updateClientData = async(req:Request, res:Response):Promise<void>=>{
+        try{
+            await this.clientBusiness.updateClientData(req)
+
+            res.status(200).end()
+        }catch(e:any){
+            let statusCode = e.statusCode || 400
+            let message = e.error === undefined ? e.message : e.error.message
+            res.status(statusCode).send(message || e.sqlMessage)
+        }
+    }
+
     clientLastOrder = async(req:Request, res:Response):Promise<void>=>{
         try{
 

@@ -1,4 +1,5 @@
 import { Request } from "express"
+import axios from "axios"
 //import Client from "../model/Client"
 import AdmUser from "../model/AdmUser"
 import ClientData from "../data/ClientData"
@@ -26,20 +27,19 @@ export default class ClientBusiness{
     } */
 
     registUser = async(req:Request):Promise<string>=>{
-        const { user, email, phone, password, role } = req.body
-        
+        const { username, email, phone, senha, role } = req.body
         const id = v4()
         const token = new Authentication().token(id)
-        const hash = new Authentication().hash(password)
+        const hash = new Authentication().hash(senha)
         const newUser = new AdmUser(
             id,
-            user,
+            username,
             email,
             phone,
             hash,
             role
         )
-
+        
         const existingUser = await this.clientData.userByPhoneAndEmail(phone, email)
         if(existingUser){
             throw{
@@ -54,9 +54,9 @@ export default class ClientBusiness{
     }
     
     loginUser = async(req:Request):Promise<string>=>{
-        const { email, password } = req.body
+        const { email, senha } = req.body
         
-        if(!email || !password){
+        if(!email || !senha){
             throw{
                 statusCode: 401,
                 error: new Error('Preencha os campos')
@@ -71,7 +71,7 @@ export default class ClientBusiness{
             }
         }
 
-        const compare = new Authentication().compare(password, user.password)        
+        const compare = new Authentication().compare(senha, user.password)        
         if(!compare){
             throw{
                 statusCode: 404,
@@ -112,6 +112,22 @@ export default class ClientBusiness{
         )
     }
 
+    updateClientData = async(req:Request):Promise<void>=>{
+        const user = await new Authentication().authToken(req)
+        const { username, email, phone } = req.body
+
+        if(!username || !email || !phone){
+            throw{
+                statusCode: 401,
+                error: new Error('Preencha todos os campos')
+            }
+        }
+
+        await this.clientData.updateClientData(
+            username, email, phone, user.id
+        )
+    }
+
     /* clientByPhone = async(req:Request):Promise<ClientModel>=>{
         const { phone } = req.body
 
@@ -144,6 +160,59 @@ export default class ClientBusiness{
         const groupedOrders = await this.clientData.clientsWithOrders()
         
         return groupedOrders
+    }
+
+    pay = async(req:Request)=>{
+        try{
+            const { paymentMethodId, email, token, items } = req.body
+            const orderId = `${email}-${Date.now()}`
+            const transaction_amount = items.reduce(
+                (acc: number, item: any) => acc + (item.unit_price * item.quantity),
+                0
+            )
+
+            const transaction_amount_fixed = Number(transaction_amount).toFixed(2)
+            const body:any = {
+                transaction_amount: Number(transaction_amount_fixed),
+                description: 'Compra no app',
+                payment_method_id: paymentMethodId,
+                payer: { email },
+                external_reference: orderId
+            }
+
+
+            if(['visa', 'master', 'amex'].includes(paymentMethodId)){
+                body.token = token
+                body.installments = 1
+            }else{
+                delete body.installments
+            }
+
+            const response = await axios.post(
+                'https://api.mercadopago.com/v1/payments',
+                body,
+                {
+                    headers: {
+                        Authorization: `Bearer ${process.env.ACCESS_TOKEN_TP}`,
+                        'X-Idempotency-Key': v4()
+                    }
+                }
+            )
+
+            return response
+        }catch(e:any){
+            if(axios.isAxiosError(e)){
+                throw{
+                    statusCode: e.response?.status || 500,
+                    error: e.response?.data || e.message
+                }
+            }
+
+            throw{
+                statusCode: e.statusCode || 500,
+                error: e.message || 'Erro interno ao processar pagamento'
+            }
+        }     
     }
 
     removeClientOrder = async(id:string):Promise<void>=>{

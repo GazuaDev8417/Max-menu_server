@@ -105,8 +105,18 @@ export default class ClientData extends Connexion{
         }
     }
 
-    updateClientData = async(id:string):Promise<void>=>{
-        
+    updateClientData = async(
+        user:string, email:string, phone:string, id:string
+    ):Promise<void>=>{
+        try{
+            await Connexion.con(this.ADMUSER_TABLE).update({
+                user,
+                email,
+                phone
+            }).where({ id })
+        }catch(e:any){
+            throw new Error(e.message || e)
+        }
     }
 
     clientLastOrder = async():Promise<number>=>{
