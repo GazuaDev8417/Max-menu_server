@@ -100,4 +100,24 @@ export default class CartController{
             res.status(statusCode).send(message || e.sqlMessage)
         }
     }
+
+    /* pay = async(req:Request, res:Response):Promise<void>=>{
+        try{
+            const response = await this.cartBusiness.pay(req)
+            res.status(200).json({
+                orderId: response.data.external_reference,
+                status: response.data.status,
+                id: response.data.id,
+                payment_type: response.data.payment_type_id,
+                qr_code: response.data.point_of_interaction?.transaction_data?.qr_code,
+                qr_code_base64: response.data.point_of_interaction?.transaction_data?.qr_code_base64,
+                qr_code_link: response.data.point_of_interaction?.transaction_data?.ticket_url
+                            || response.data.point_of_interaction?.transaction_data?.qr_code_link
+            })
+        }catch(e:any){
+            let statusCode = e.statusCode || 400
+            let message = e.error === undefined ? e.message : e.error.message
+            res.status(statusCode).send(message || e.sqlMessage)
+        }
+    } */
 }
