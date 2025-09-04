@@ -7,7 +7,9 @@ import ProductData from "../data/ProductData"
 import { ProductCartModel, GroupedProduct, CartModel, ProductModel } from "../model/InterfacesAndTypes"
 import { v4 } from "uuid"
 import Authentication from "../services/Authentication"
+import { config } from "dotenv"
 
+config()
 
 
 export default class CartBusiness{
