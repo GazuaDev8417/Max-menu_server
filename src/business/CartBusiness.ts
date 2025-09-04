@@ -20,8 +20,7 @@ export default class CartBusiness{
 
 
     insertInCart = async(req:Request):Promise<void>=>{
-        const token = req.headers.authorization
-        const client = new Authentication().tokenData(token as string).userId
+        const client = await new Authentication().authToken(req)
         const { price, quantity, flavor, productId, max_quantity, step } = req.body
         const convertedPrice = Number(price)
         
@@ -33,7 +32,7 @@ export default class CartBusiness{
         }
 
         const product:ProductCartModel | null = await this.productData
-            .getProductCartByClient(client, productId)
+            .getProductCartByClient(client.id, productId)
               
         if(!product){
             const productToCart:ProductModel = await this.productData.getProductById(productId)
@@ -43,7 +42,7 @@ export default class CartBusiness{
                 productToCart.price,
                 productToCart.quantity,
                 productToCart.quantity * productToCart.price,
-                client,
+                client.id,
                 productId,
                 productToCart.category
             )
@@ -57,7 +56,7 @@ export default class CartBusiness{
             flavor,
             quantity * price ,
             productId,
-            client,
+            client.id,
             max_quantity,
             step
         )

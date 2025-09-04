@@ -103,6 +103,7 @@ export default class CartController{
 
     pay = async(req:Request, res:Response):Promise<void>=>{
         try{
+            
             const response = await this.cartBusiness.pay(req)
             res.status(200).json({
                 orderId: response.data.external_reference,
