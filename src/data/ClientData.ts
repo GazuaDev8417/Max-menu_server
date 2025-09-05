@@ -9,6 +9,8 @@ import AdmUser from "../model/AdmUser"
 export default class ClientData extends Connexion{
     protected CLIENT_TABLE = 'clients'
     protected ADMUSER_TABLE = 'admuser'
+    protected CART = 'cart'
+    protected PRODUCTS_CART = 'products_cart'
 
 
 
@@ -156,6 +158,8 @@ export default class ClientData extends Connexion{
 
     deleteAccount = async(id:string):Promise<void>=>{
         try{
+            await Connexion.con(this.CART).del().where({ client: id })
+            await Connexion.con(this.PRODUCTS_CART).del().where({ client: id })
             await Connexion.con(this.ADMUSER_TABLE).del().where({ id })
         }catch(e:any){
             throw new Error(e.message || e)
