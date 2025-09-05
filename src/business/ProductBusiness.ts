@@ -166,8 +166,7 @@ export default class ProductBusiness{
 
 
     verifyMaxQnt = async(req:Request):Promise<{ maxStep:number, total_quantity:number }>=>{
-        const token = req.headers.authorization
-        const client = new Authentication().tokenData(token as string).userId
+        const client = (await new Authentication().authToken(req)).id
         const objectFlavors = await this.productData.verifyMaxQnt(req.params.id, client)
         const maxStep = objectFlavors.maxStep
         const total_quantity = objectFlavors.total_quantity

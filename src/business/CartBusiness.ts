@@ -96,8 +96,7 @@ export default class CartBusiness{
     }
 
     updateFlavorQntFromCart = async(req:Request):Promise<void>=>{
-        const token = req.headers.authorization
-        const client = new Authentication().tokenData(token as string).userId
+        const client = (await new Authentication().authToken(req)).id
         const {
             price, flavor, product_id, 
             max_quantity, step, quantity
