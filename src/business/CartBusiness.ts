@@ -4,6 +4,7 @@ import Cart from "../model/Cart"
 import ProductCart from "../model/Product_cart"
 import CartData from "../data/CartData"
 import ProductData from "../data/ProductData"
+import moment from "moment-timezone"
 import { ProductCartModel, GroupedProduct, CartModel, ProductModel } from "../model/InterfacesAndTypes"
 import { v4 } from "uuid"
 import Authentication from "../services/Authentication"
@@ -21,7 +22,9 @@ export default class CartBusiness{
 
     insertInCart = async(req:Request):Promise<void>=>{
         const client = await new Authentication().authToken(req)
-        const { price, quantity, flavor, productId, max_quantity, step } = req.body
+        const { price, quantity, flavor, productId, momentString, max_quantity, step } = req.body
+        const localMoment = moment.utc(momentString).tz("America/Sao_Paulo").format('DD/MM/YYYY [às] HH:mm')
+
         const convertedPrice = Number(price)
         
         if(!productId){
@@ -34,8 +37,8 @@ export default class CartBusiness{
         const product:ProductCartModel | null = await this.productData
             .getProductCartByClient(client.id, productId)
               
+        const productToCart:ProductModel = await this.productData.getProductById(productId)
         if(!product){
-            const productToCart:ProductModel = await this.productData.getProductById(productId)
             const newCartProd = new ProductCart(
                 v4(),
                 productToCart.product,
@@ -44,10 +47,13 @@ export default class CartBusiness{
                 productToCart.quantity * productToCart.price,
                 client.id,
                 productId,
-                productToCart.category
+                productToCart.category,
+                localMoment
             )
             await this.productData.insertInProductCart(newCartProd)
         }
+
+        if(productToCart.category === 'bebida') return
 
         const newCart = new Cart(
             v4(),
@@ -58,7 +64,8 @@ export default class CartBusiness{
             productId,
             client.id,
             max_quantity,
-            step
+            step,
+            localMoment
         )
          
         await this.cartData.insertInCart(newCart)

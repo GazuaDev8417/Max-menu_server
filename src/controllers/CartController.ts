@@ -65,7 +65,7 @@ export default class CartController{
 
     updateFlavorQntFromCart = async(req:Request, res:Response):Promise<void>=>{
         try{
-
+            
             await this.cartBusiness.updateFlavorQntFromCart(req)
 
             res.status(200).end()
@@ -103,7 +103,7 @@ export default class CartController{
 
     pay = async(req:Request, res:Response):Promise<void>=>{
         try{
-            
+            console.log(req.body)
             const response = await this.cartBusiness.pay(req)
             res.status(200).json({
                 orderId: response.data.external_reference,

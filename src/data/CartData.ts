@@ -147,7 +147,6 @@ export default class CartData extends Connexion{
 
             await Connexion.con(this.CART_TABLE)
                 .del().where({ id })
-
         }catch(e:any){
             throw new Error(e.message || e)
         }
