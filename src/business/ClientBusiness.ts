@@ -4,7 +4,7 @@ import axios from "axios"
 import AdmUser from "../model/AdmUser"
 import ClientData from "../data/ClientData"
 import Authentication from "../services/Authentication"
-import { Order, UserModel } from "../model/InterfacesAndTypes"
+import { GroupedProduct, UserModel } from "../model/InterfacesAndTypes"
 import { v4 } from "uuid"
 
 
@@ -86,14 +86,21 @@ export default class ClientBusiness{
     userById = async(req:Request):Promise<UserModel>=>{
         const user = await new Authentication().authToken(req)
 
-        if(!user){
+        return user
+    }
+
+    clientById = async(req:Request):Promise<UserModel>=>{
+        const user = await new Authentication().authToken(req)
+        if(user.role !== 'ADM'){
             throw{
-                statusCode: 404,
-                error: new Error('Cliente não encontrado')
+                statusCode: 403,
+                error: new Error('Somente para usuário administrador')
             }
         }
+        
+        const client = await this.clientData.clientById(req.params.id)
 
-        return user
+        return client
     }
 
     updateAddress = async(req:Request):Promise<void>=>{
@@ -156,11 +163,11 @@ export default class ClientBusiness{
         return lastOrder
     }
 
-    clientsWithOrders = async():Promise<Order[]>=>{
+    /* clientsWithOrders = async():Promise<Order[]>=>{
         const groupedOrders = await this.clientData.clientsWithOrders()
         
         return groupedOrders
-    }
+    } */
 
     pay = async(req:Request)=>{
         try{
@@ -223,5 +230,21 @@ export default class ClientBusiness{
         const user = await new Authentication().authToken(req)
         
         await this.clientData.deleteAccount(user.id) 
+    }
+
+    productsOnOrderByClients = async(req:Request):Promise<GroupedProduct[]>=>{
+        await new Authentication().authToken(req)
+        const products = await this.clientData.productsOnOrderByClients()
+
+        if(products.length === 0){
+            throw{
+                statusCode: 404,
+                error: new Error(
+                    'Seu carrinho ainda está vazio. Sinta-se à vontade para escolher seus produtos e fazer seus pedidos'
+                )
+            }
+        }
+
+        return products
     }
 }

@@ -82,6 +82,18 @@ export default class ClientController{
         }
     }
 
+    clientById = async(req:Request, res:Response):Promise<void>=>{
+        try{
+            const client = await this.clientBusiness.clientById(req)
+
+            res.status(200).send(client)
+        }catch(e:any){
+            let statusCode = e.statusCode || 400
+            let message = e.error === undefined ? e.message : e.error.message
+            res.status(statusCode).send(message || e.sqlMessage)
+        }
+    }
+
     updateAddress = async(req:Request, res:Response):Promise<void>=>{
         try{
             await this.clientBusiness.updateAddress(req)
@@ -119,7 +131,7 @@ export default class ClientController{
         }
     }
 
-    clientsWithOrders = async(req:Request, res:Response):Promise<void>=>{
+    /* clientsWithOrders = async(req:Request, res:Response):Promise<void>=>{
         try{
 
             const groupedOrders = await this.clientBusiness.clientsWithOrders()
@@ -130,7 +142,7 @@ export default class ClientController{
             let message = e.error === undefined ? e.message : e.error.message
             res.status(statusCode).send(message || e.sqlMessage)
         }
-    }
+    } */
 
     removeClientOrder = async(req:Request, res:Response):Promise<void>=>{
         try{
@@ -153,6 +165,19 @@ export default class ClientController{
             await this.clientBusiness.deleteAccount(req)
 
             res.status(200).end()
+        }catch(e:any){
+            let statusCode = e.statusCode || 400
+            let message = e.error === undefined ? e.message : e.error.message
+            res.status(statusCode).send(message || e.sqlMessage)
+        }
+    }
+
+    productsOnOrderByClients = async(req:Request, res:Response):Promise<void>=>{
+        try{
+
+            const products = await this.clientBusiness.productsOnOrderByClients(req)
+
+            res.status(200).send(products)
         }catch(e:any){
             let statusCode = e.statusCode || 400
             let message = e.error === undefined ? e.message : e.error.message

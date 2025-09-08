@@ -41,7 +41,6 @@ app.post('/insert_in_cart', cartController.insertInCart)
 app.post('/cart_product', cartController.checkProductsFromCart)
 app.post('/pay', cartController.pay)
 
-
 //app.post('/regist/client', clientController.registClient)
 app.post('/user/signup', clientController.registUser)
 app.post('/user/login', clientController.loginUser)
@@ -52,7 +51,7 @@ app.patch('/user', clientController.updateClientData)
 //app.get('/generate-user-id', clientController.generateUserId)
 app.get('/client/lastorder', clientController.clientLastOrder)
 app.get('/user', clientController.userById)
-
+app.get('/client/:id', clientController.clientById)
 
 app.get('/step-qnt_max/:id', productCntroller.verifyMaxQnt)
 app.get('/product/:id', productCntroller.getProductById)
@@ -61,11 +60,13 @@ app.get('/products/cart', productCntroller.getCartByClient)
 
 
 app.get('/clients/cart/', cartController.getCartFromClient)
-app.get('/clients/orders', clientController.clientsWithOrders)
+//app.get('/clients/orders', clientController.clientsWithOrders)
+app.get('/clients/orders', clientController.productsOnOrderByClients)
 
 app.get('/cart/product/:id', cartController.cartProductById)
 
 app.get('/products/flavors', cartController.productsOnOrder)
+app.get('/products/flavors/:id', cartController.productsOnOrderByClient)
 
 
 //app.get('/flavors_step2/:id', productCntroller.flavorsByProductStep2)

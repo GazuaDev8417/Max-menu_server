@@ -1,6 +1,6 @@
 import Connexion from "./Connexion"
 //import Client from "../model/Client"
-import { /* ClientModel, */ UserModel } from "../model/InterfacesAndTypes"
+import { /* ClientModel, */ FlavorModel, GroupedProduct, ProductCartModel, UserModel } from "../model/InterfacesAndTypes"
 import { Order } from "../model/InterfacesAndTypes"
 import AdmUser from "../model/AdmUser"
 
@@ -70,7 +70,7 @@ export default class ClientData extends Connexion{
         }
     }
 
-    userById = async(id:string):Promise<UserModel>=>{
+    clientById = async(id:string):Promise<UserModel>=>{
         try{
             const [user] = await Connexion.con(this.ADMUSER_TABLE).where({ id })
 
@@ -134,7 +134,7 @@ export default class ClientData extends Connexion{
         }
     }
 
-    clientsWithOrders = async():Promise<Order[]>=>{
+    /* clientsWithOrders = async():Promise<Order[]>=>{
         const clients = await Connexion.con(this.CLIENT_TABLE)
 
         if(clients.length === 0){
@@ -142,7 +142,7 @@ export default class ClientData extends Connexion{
         }
 
         return clients
-    }
+    } */
 
     removeClientOrder = async(id:string):Promise<void>=>{
         try{
@@ -161,6 +161,42 @@ export default class ClientData extends Connexion{
             await Connexion.con(this.CART).del().where({ client: id })
             await Connexion.con(this.PRODUCTS_CART).del().where({ client: id })
             await Connexion.con(this.ADMUSER_TABLE).del().where({ id })
+        }catch(e:any){
+            throw new Error(e.message || e)
+        }
+    }
+
+    productsOnOrderByClients = async():Promise<GroupedProduct[]>=>{
+        try{
+
+            const flavors:FlavorModel[] = await Connexion.con(this.CART)                
+            const products:ProductCartModel[] = await Connexion.con(this.PRODUCTS_CART)
+                
+            const groupedByProduct: Record<string, FlavorModel[]> = flavors.reduce(
+                (acc, item)=>{
+                    if(!acc[item.product_id]){
+                        acc[item.product_id] = []
+                    }
+                    acc[item.product_id].push(item)
+                    return acc
+                },
+                {} as Record<string, FlavorModel[]>
+            )  
+
+            const groupedWithProductInfo:GroupedProduct[] = products.map(product=>{
+                if(product.category === 'bebida'){
+                    return{
+                        product,
+                        items:[]
+                    }
+                }
+                return{
+                    product,
+                    items: (groupedByProduct[product.product_id] || []).sort((a, b) => a.flavor.localeCompare(b.flavor))
+                }                
+            }).sort((a, b) => a.product.product.localeCompare(b.product.product))
+            
+            return groupedWithProductInfo
         }catch(e:any){
             throw new Error(e.message || e)
         }

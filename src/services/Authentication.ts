@@ -43,7 +43,7 @@ export default class Authentication{
     authToken = async(req:Request):Promise<UserModel>=>{
         const token = req.headers.authorization
         const tokenData =  this.tokenData(token as string)
-        const user = await new ClientData().userById(tokenData.userId)
+        const user = await new ClientData().clientById(tokenData.userId)
         
         if(!user){
             throw{

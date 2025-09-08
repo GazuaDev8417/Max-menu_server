@@ -86,9 +86,32 @@ export default class CartBusiness{
     }
 
     productsOnOrder = async(req:Request):Promise<GroupedProduct[]>=>{
-        const token = req.headers.authorization
-        const client = new Authentication().tokenData(token as string).userId
+        const client = (await new Authentication().authToken(req)).id
         const products = await this.cartData.productsOnOrder(client)
+
+        if(products.length === 0){
+            throw{
+                statusCode: 404,
+                error: new Error(
+                    'Seu carrinho ainda está vazio. Sinta-se à vontade para escolher seus produtos e fazer seus pedidos'
+                )
+            }
+        }
+
+        return products
+    }
+
+    productsOnOrderByClient = async(req:Request):Promise<GroupedProduct[]>=>{
+        const user = await new Authentication().authToken(req)
+
+        if(user.role !== 'ADM'){
+            throw{
+                statusCode: 401,
+                error: new Error('Somente para usuário administrador')
+            }
+        }
+
+        const products = await this.cartData.productsOnOrderByClient(req.params.id)
 
         if(products.length === 0){
             throw{
