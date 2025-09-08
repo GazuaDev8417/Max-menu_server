@@ -173,7 +173,7 @@ export default class ProductData extends Connexion{
         }
     }
 
-    removeProductFromCartByClient = async(client:string):Promise<void>=>{
+    /* removeProductFromCartByClient = async(client:string):Promise<void>=>{
         try{
 
             await Connexion.con(this.PRODUCTCART_TABLE).del()
@@ -184,7 +184,7 @@ export default class ProductData extends Connexion{
         }catch(e:any){
             throw new Error(`Erro ao remover produto: ${e}`)
         }
-    }
+    } */
 
     updateProductQntFromCart = async(id:string, quantity:number, product:ProductCartModel):Promise<void>=>{
         try{

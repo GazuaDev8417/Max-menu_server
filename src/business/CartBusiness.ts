@@ -48,7 +48,8 @@ export default class CartBusiness{
                 client.id,
                 productId,
                 productToCart.category,
-                localMoment
+                localMoment,
+                'Pendente'
             )
             await this.productData.insertInProductCart(newCartProd)
         }
@@ -65,7 +66,8 @@ export default class CartBusiness{
             client.id,
             max_quantity,
             step,
-            localMoment
+            localMoment,
+            'Pendente'
         )
          
         await this.cartData.insertInCart(newCart)
@@ -190,7 +192,7 @@ export default class CartBusiness{
         await this.cartData.removeFlavorFromCartByClient(clientId)
     }
 
-    removeProductFromCartByClient = async(req:Request):Promise<void>=>{
+    /* removeProductFromCartByClient = async(req:Request):Promise<void>=>{
         const token = req.headers.authorization
         const clientId = new Authentication().tokenData(token as string).userId
         const products:ProductCartModel[] = await this.productData.getCartByClient(clientId)
@@ -203,7 +205,7 @@ export default class CartBusiness{
         }
 
         await this.productData.removeProductFromCartByClient(clientId)
-    }
+    } */
 
     /* getCartFromClient = async(req:Request):Promise<CartModel[]>=>{ 
         const token = req.headers.authorization

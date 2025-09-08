@@ -15,7 +15,8 @@ export default class Cart extends Connexion{
         private client:string,
         private max_quantity:number,
         private step:number,
-        private moment:string
+        private moment:string,
+        private status:string
     ){ super() }
 
     save = async()=>{
@@ -30,7 +31,8 @@ export default class Cart extends Connexion{
                 client: this.client,
                 max_quantity: this.max_quantity,
                 step: this.step,
-                moment: this.moment
+                moment: this.moment,
+                status: this.status
             })
         }catch(e){
             throw new Error(`Erro ao registrar produto: ${e}`)

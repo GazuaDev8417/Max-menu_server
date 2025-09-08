@@ -1,8 +1,8 @@
 import { Request } from "express"
 import ProductData from "../data/ProductData"
 //import Product from "../model/Product"
-import ProductCart from "../model/Product_cart"
-import { v4 } from "uuid"
+/* import ProductCart from "../model/Product_cart"
+import { v4 } from "uuid" */
 import { ProductModel, ProductCartModel, FlavorModel } from "../model/InterfacesAndTypes"
 import Authentication from "../services/Authentication"
 
@@ -158,12 +158,12 @@ export default class ProductBusiness{
         await this.productData.removeProductFromCart(id)
     } */
 
-    removeProductFromCartByClient = async(req:Request):Promise<void>=>{
+    /* removeProductFromCartByClient = async(req:Request):Promise<void>=>{
         const token = req.headers.authorization
         const client = new Authentication().tokenData(token as string).userId
         
         await this.productData.removeProductFromCartByClient(client)    
-    }
+    } */
 
 
     verifyMaxQnt = async(req:Request):Promise<{ maxStep:number, total_quantity:number }>=>{

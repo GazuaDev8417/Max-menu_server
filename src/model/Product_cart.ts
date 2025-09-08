@@ -15,6 +15,7 @@ export default class ProductCart extends Connexion{
         private product_id:string,
         private category:string,
         private moment:string,
+        private status:string
     ){ super() }
 
     save = async()=>{
@@ -28,7 +29,8 @@ export default class ProductCart extends Connexion{
                 client: this.client,
                 product_id: this.product_id,
                 category: this.category,
-                moment: this.moment
+                moment: this.moment,
+                status: this.status
             })
         }catch(e){
             throw new Error(`Erro ao adicionar produto no carrinho: ${e}`)

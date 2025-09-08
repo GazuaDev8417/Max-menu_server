@@ -91,7 +91,7 @@ export default class ProductController{
         }
     } */
 
-    removeProductFromCartByClient = async(req:Request, res:Response):Promise<void>=>{
+    /* removeProductFromCartByClient = async(req:Request, res:Response):Promise<void>=>{
         try{
 
             await this.productBusiness.removeProductFromCartByClient(req)
@@ -102,7 +102,7 @@ export default class ProductController{
             let message = e.error === undefined ? e.message : e.error.message
             res.status(statusCode).json({ message: message || e.sqlMessage })
         }
-    }
+    } */
 
 
     /* flavorsByProductStep2 = async(req:Request, res:Response):Promise<void>=>{
