@@ -157,11 +157,11 @@ export default class ClientBusiness{
         return client
     } */
 
-    clientLastOrder = async():Promise<number>=>{
+    /* clientLastOrder = async():Promise<number>=>{
         const lastOrder = await this.clientData.clientLastOrder()
 
         return lastOrder
-    }
+    } */
 
     /* clientsWithOrders = async():Promise<Order[]>=>{
         const groupedOrders = await this.clientData.clientsWithOrders()
@@ -222,9 +222,9 @@ export default class ClientBusiness{
         }     
     }
 
-    removeClientOrder = async(id:string):Promise<void>=>{
+    /* removeClientOrder = async(id:string):Promise<void>=>{
         await this.clientData.removeClientOrder(id)
-    }
+    } */
 
     deleteAccount = async(req:Request):Promise<void>=>{
         const user = await new Authentication().authToken(req)

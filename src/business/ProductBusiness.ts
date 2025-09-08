@@ -1,6 +1,6 @@
 import { Request } from "express"
 import ProductData from "../data/ProductData"
-import Product from "../model/Product"
+//import Product from "../model/Product"
 import ProductCart from "../model/Product_cart"
 import { v4 } from "uuid"
 import { ProductModel, ProductCartModel, FlavorModel } from "../model/InterfacesAndTypes"
@@ -14,7 +14,7 @@ export default class ProductBusiness{
         private productData:ProductData
     ){}
 
-    registProducts = async(req:Request):Promise<void>=>{
+    /* registProducts = async(req:Request):Promise<void>=>{
         const { product, description, category, price, quantity } = req.body
 
         if(!product || !category || !price || !quantity){
@@ -43,9 +43,9 @@ export default class ProductBusiness{
         )
 
         await this.productData.registProducts(newProduct)
-    }
+    } */
 
-    insertInProductCart = async(req:Request):Promise<void>=>{
+    /* insertInProductCart = async(req:Request):Promise<void>=>{
         const token = req.headers.authorization
         const client = new Authentication().tokenData(token as string).userId
         const { product, price, quantity, total, product_id, category } = req.body
@@ -74,11 +74,12 @@ export default class ProductBusiness{
             convertedPrice * quantity,
             client,
             product_id,
-            category
+            category,
+            moment
         )
 
         await this.productData.insertInProductCart(newProdctCart)
-    }
+    } */
 
     getCartByClient = async(req:Request):Promise<ProductCartModel[]>=>{
         const token = req.headers.authorization
@@ -143,7 +144,7 @@ export default class ProductBusiness{
     }  
 
 
-    removeProductFromCart = async(req:Request):Promise<void>=>{
+    /* removeProductFromCart = async(req:Request):Promise<void>=>{
         const id = req.params.id
 
         const product = await this.productData.getProductCartById(id)
@@ -155,7 +156,7 @@ export default class ProductBusiness{
         }
         
         await this.productData.removeProductFromCart(id)
-    }
+    } */
 
     removeProductFromCartByClient = async(req:Request):Promise<void>=>{
         const token = req.headers.authorization

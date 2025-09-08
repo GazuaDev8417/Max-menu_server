@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import ClientBusiness from "../business/ClientBusiness"
-import { UserModel } from "../model/InterfacesAndTypes"
+//import { UserModel } from "../model/InterfacesAndTypes"
 
 
 
@@ -118,7 +118,7 @@ export default class ClientController{
         }
     }
 
-    clientLastOrder = async(req:Request, res:Response):Promise<void>=>{
+    /* clientLastOrder = async(req:Request, res:Response):Promise<void>=>{
         try{
 
             const lastorder = await this.clientBusiness.clientLastOrder()
@@ -129,7 +129,7 @@ export default class ClientController{
             let message = e.error === undefined ? e.message : e.error.message
             res.status(statusCode).send(message || e.sqlMessage)
         }
-    }
+    } */
 
     /* clientsWithOrders = async(req:Request, res:Response):Promise<void>=>{
         try{
@@ -144,7 +144,7 @@ export default class ClientController{
         }
     } */
 
-    removeClientOrder = async(req:Request, res:Response):Promise<void>=>{
+    /* removeClientOrder = async(req:Request, res:Response):Promise<void>=>{
         try{
 
             const id = req.params.id
@@ -157,7 +157,7 @@ export default class ClientController{
             let message = e.error === undefined ? e.message : e.error.message
             res.status(statusCode).send(message || e.sqlMessage)
         }
-    }
+    } */
 
     deleteAccount = async(req:Request, res:Response):Promise<void>=>{
         try{

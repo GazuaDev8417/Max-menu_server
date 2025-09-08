@@ -71,7 +71,7 @@ export default class CartBusiness{
         await this.cartData.insertInCart(newCart)
     }
 
-    checkProductsFromCart = async(req:Request):Promise<CartModel>=>{
+    /* checkProductsFromCart = async(req:Request):Promise<CartModel>=>{
         const { client, productId, flavor, price, max_quantity } = req.body
         const [product] = await this.cartData.checkProductsFromCart(productId, client, flavor, price, max_quantity) 
         
@@ -83,7 +83,7 @@ export default class CartBusiness{
         }
 
         return product
-    }
+    } */
 
     productsOnOrder = async(req:Request):Promise<GroupedProduct[]>=>{
         const client = (await new Authentication().authToken(req)).id
@@ -162,7 +162,7 @@ export default class CartBusiness{
         return product
     }
 
-    removeFlavorFromCart = async(req:Request):Promise<void>=>{
+    /* removeFlavorFromCart = async(req:Request):Promise<void>=>{
         const proudct = await this.cartData.cartProductById(req.params.id)
 
         if(!proudct){
@@ -173,7 +173,7 @@ export default class CartBusiness{
         }
 
         await this.cartData.removeFlavorFromCart(req.params.id)
-    }
+    } */
 
     removeFlavorFromCartByClient = async(req:Request):Promise<void>=>{
         const token = req.headers.authorization
@@ -205,13 +205,13 @@ export default class CartBusiness{
         await this.productData.removeProductFromCartByClient(clientId)
     }
 
-    getCartFromClient = async(req:Request):Promise<CartModel[]>=>{ 
+    /* getCartFromClient = async(req:Request):Promise<CartModel[]>=>{ 
         const token = req.headers.authorization
         const id = new Authentication().tokenData(token as string).userId
         const products = await this.cartData.getCartFromClient(id)
 
         return products
-    }
+    } */
 
     pay = async(req:Request)=>{
         try{

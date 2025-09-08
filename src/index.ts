@@ -33,12 +33,12 @@ const clientController = new ClientController(
 ) 
 
 
-app.post('/regist_products', productCntroller.registProducts)
+//app.post('/regist_products', productCntroller.registProducts)
 app.post('/flavors/:id', productCntroller.flavorsByProduct)
-app.post('/products/cart', productCntroller.insertInProductCart)
+//app.post('/products/cart', productCntroller.insertInProductCart)
 
 app.post('/insert_in_cart', cartController.insertInCart)
-app.post('/cart_product', cartController.checkProductsFromCart)
+//app.post('/cart_product', cartController.checkProductsFromCart)
 app.post('/pay', cartController.pay)
 
 //app.post('/regist/client', clientController.registClient)
@@ -49,7 +49,7 @@ app.patch('/user/address', clientController.updateAddress)
 app.patch('/user', clientController.updateClientData)
 
 //app.get('/generate-user-id', clientController.generateUserId)
-app.get('/client/lastorder', clientController.clientLastOrder)
+//app.get('/client/lastorder', clientController.clientLastOrder)
 app.get('/user', clientController.userById)
 app.get('/client/:id', clientController.clientById)
 
@@ -59,7 +59,7 @@ app.get('/products/', productCntroller.getAllProducts)
 app.get('/products/cart', productCntroller.getCartByClient)
 
 
-app.get('/clients/cart/', cartController.getCartFromClient)
+//app.get('/clients/cart/', cartController.getCartFromClient)
 //app.get('/clients/orders', clientController.clientsWithOrders)
 app.get('/clients/orders', clientController.productsOnOrderByClients)
 
@@ -79,9 +79,9 @@ app.patch('/cart/product/:id', productCntroller.updateProductQntFromCart)
 
 app.patch('/update_qnt/', cartController.updateFlavorQntFromCart)
 
-app.delete('/product_cart/:id', cartController.removeFlavorFromCart)
-app.delete('/product/cart/:id', productCntroller.removeProductFromCart)
+//app.delete('/product_cart/:id', cartController.removeFlavorFromCart)
+//app.delete('/product/cart/:id', productCntroller.removeProductFromCart)
 app.delete('/product/client', productCntroller.removeProductFromCartByClient)
-app.delete('/client/order/:id', clientController.removeClientOrder)
+//app.delete('/client/order/:id', clientController.removeClientOrder)
 app.delete('/del-user', clientController.deleteAccount)
 

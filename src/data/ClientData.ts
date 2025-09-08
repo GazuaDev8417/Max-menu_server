@@ -1,7 +1,7 @@
 import Connexion from "./Connexion"
 //import Client from "../model/Client"
 import { /* ClientModel, */ FlavorModel, GroupedProduct, ProductCartModel, UserModel } from "../model/InterfacesAndTypes"
-import { Order } from "../model/InterfacesAndTypes"
+//import { Order } from "../model/InterfacesAndTypes"
 import AdmUser from "../model/AdmUser"
 
 
@@ -121,7 +121,7 @@ export default class ClientData extends Connexion{
         }
     }
 
-    clientLastOrder = async():Promise<number>=>{
+    /* clientLastOrder = async():Promise<number>=>{
         try{
 
             const [result] = await Connexion.con(this.CLIENT_TABLE)   
@@ -132,7 +132,7 @@ export default class ClientData extends Connexion{
         }catch(e:any){
             throw new Error(e.message || e)
         }
-    }
+    } */
 
     /* clientsWithOrders = async():Promise<Order[]>=>{
         const clients = await Connexion.con(this.CLIENT_TABLE)
@@ -144,7 +144,7 @@ export default class ClientData extends Connexion{
         return clients
     } */
 
-    removeClientOrder = async(id:string):Promise<void>=>{
+    /* removeClientOrder = async(id:string):Promise<void>=>{
         try{
 
             await Connexion.con(this.CLIENT_TABLE)
@@ -154,7 +154,7 @@ export default class ClientData extends Connexion{
         }catch(e:any){
             throw new Error(e.message || e)
         }
-    }
+    } */
 
     deleteAccount = async(id:string):Promise<void>=>{
         try{

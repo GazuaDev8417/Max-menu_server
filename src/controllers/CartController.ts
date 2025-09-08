@@ -24,7 +24,7 @@ export default class CartController{
         }
     }
 
-    checkProductsFromCart = async(req:Request, res:Response):Promise<void>=>{
+    /* checkProductsFromCart = async(req:Request, res:Response):Promise<void>=>{
         try{
 
             const products = await this.cartBusiness.checkProductsFromCart(req)
@@ -35,7 +35,7 @@ export default class CartController{
             let message = e.error === undefined ? e.message : e.error.message
             res.status(statusCode).send(message || e.sqlMessage)
         }
-    }
+    } */
 
     cartProductById = async(req:Request, res:Response):Promise<void>=>{
         try{
@@ -89,7 +89,7 @@ export default class CartController{
         }
     }
 
-    removeFlavorFromCart = async(req:Request, res:Response):Promise<void>=>{
+    /* removeFlavorFromCart = async(req:Request, res:Response):Promise<void>=>{
         try{
 
             await this.cartBusiness.removeFlavorFromCart(req)
@@ -99,9 +99,9 @@ export default class CartController{
             let message = e.error === undefined ? e.message : e.error.message
             res.status(statusCode).send(message || e.sqlMessage)
         }
-    }
+    } */
 
-    getCartFromClient = async(req:Request, res:Response):Promise<void>=>{
+    /* getCartFromClient = async(req:Request, res:Response):Promise<void>=>{
         try{
 
             const products = await this.cartBusiness.getCartFromClient(req)
@@ -112,7 +112,7 @@ export default class CartController{
             let message = e.error === undefined ? e.message : e.error.message
             res.status(statusCode).send(message || e.sqlMessage)
         }
-    }
+    } */
 
     pay = async(req:Request, res:Response):Promise<void>=>{
         try{

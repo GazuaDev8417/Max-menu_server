@@ -8,7 +8,7 @@ export default class ProductController{
         private productBusiness:ProductBusiness
     ){}
 
-    registProducts = async(req:Request, res:Response):Promise<void>=>{
+    /* registProducts = async(req:Request, res:Response):Promise<void>=>{
         try{
 
             await this.productBusiness.registProducts(req)
@@ -19,10 +19,10 @@ export default class ProductController{
             let message = e.error === undefined ? e.message : e.error.message
             res.status(statusCode).send(message || e.sqlMessage)
         }
-    }
+    } */
 
 
-    insertInProductCart = async(req:Request, res:Response):Promise<void>=>{
+    /* insertInProductCart = async(req:Request, res:Response):Promise<void>=>{
         try{
 
             await this.productBusiness.insertInProductCart(req)
@@ -33,7 +33,7 @@ export default class ProductController{
             let message = e.error === undefined ? e.message : e.error.message
             res.status(statusCode).send(message || e.sqlMessage)
         }
-    }
+    } */
 
 
     getProductById = async(req:Request, res:Response):Promise<void>=>{
@@ -78,7 +78,7 @@ export default class ProductController{
     }
 
 
-    removeProductFromCart = async(req:Request, res:Response):Promise<void>=>{
+    /* removeProductFromCart = async(req:Request, res:Response):Promise<void>=>{
         try{
 
             await this.productBusiness.removeProductFromCart(req)
@@ -89,7 +89,7 @@ export default class ProductController{
             let message = e.error === undefined ? e.message : e.error.message
             res.status(statusCode).json({ message: message || e.sqlMessage })
         }
-    }
+    } */
 
     removeProductFromCartByClient = async(req:Request, res:Response):Promise<void>=>{
         try{

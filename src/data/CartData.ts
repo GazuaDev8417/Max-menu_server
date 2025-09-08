@@ -112,7 +112,7 @@ export default class CartData extends Connexion{
         }
     }
 
-    checkProductsFromCart = async(productId:string, client:string, flavor:string, price:number, max_quantity:number):Promise<CartModel[]>=>{
+    /* checkProductsFromCart = async(productId:string, client:string, flavor:string, price:number, max_quantity:number):Promise<CartModel[]>=>{
         try{
             
             const cartProduct = await Connexion.con(this.CART_TABLE)
@@ -122,7 +122,7 @@ export default class CartData extends Connexion{
         }catch(e:any){
             throw new Error(e.message || e)
         }
-    }
+    } */
 
     updateFlavorQntFromCart = async(
         price:number, flavor:string, product_id:string, 
