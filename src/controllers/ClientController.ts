@@ -98,7 +98,7 @@ export default class ClientController{
         try{
             await this.clientBusiness.updateAddress(req)
 
-            res.status(200).end()
+            res.status(200).send('Endereço alterado')
         }catch(e:any){
             let statusCode = e.statusCode || 400
             let message = e.error === undefined ? e.message : e.error.message
@@ -110,7 +110,7 @@ export default class ClientController{
         try{
             await this.clientBusiness.updateClientData(req)
 
-            res.status(200).end()
+            res.status(200).send('Dados do cliente atualizados')
         }catch(e:any){
             let statusCode = e.statusCode || 400
             let message = e.error === undefined ? e.message : e.error.message
@@ -164,7 +164,7 @@ export default class ClientController{
 
             await this.clientBusiness.deleteAccount(req)
 
-            res.status(200).end()
+            res.status(200).send('Conta removida com sucesso')
         }catch(e:any){
             let statusCode = e.statusCode || 400
             let message = e.error === undefined ? e.message : e.error.message

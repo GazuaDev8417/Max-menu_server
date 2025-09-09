@@ -72,7 +72,9 @@ export default class ClientData extends Connexion{
 
     clientById = async(id:string):Promise<UserModel>=>{
         try{
-            const [user] = await Connexion.con(this.ADMUSER_TABLE).where({ id })
+            const [user] = await Connexion.con(this.ADMUSER_TABLE)
+            .select('id', 'phone', 'role', 'user', 'email', 'street', 'cep', 'neighbourhood', 'complement')
+            .where({ id })
 
             return user
         }catch(e:any){

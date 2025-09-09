@@ -1,0 +1,902 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Documentação do projeto Cardápio Digital",
+    "version": "1.0.0",
+    "description": "API para gerenciar usuários, produtos, carrinho, pagamentos e pedidos na no projeto [Cardápio Digital](https://max-menu.vercel.app/)."
+  },
+  "servers": [
+    {
+      "url": "https://max-menu-server.vercel.app"
+    }
+  ],
+  "paths": {
+    "/flavors/{id}": {
+      "post": {
+        "summary": "Listar sabores de um produto por etapas",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID do produto"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "step": { "type": "integer" }
+                },
+                "required": ["step"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sabores retornados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "flavors": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Flavor" }
+                    },
+                    "maxStep": { "type": "integer" },
+                    "total_quantity": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Erro ao buscar sabores" }
+        }
+      }
+    },
+    "/insert_in_cart": {
+      "post": {
+        "summary": "Adicionar item ao carrinho",
+        "tags": ["Cart"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticação",
+            "schema": { "type": "string", "example": "Bearer SEU_TOKEN_AQUI" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "price": { "type": "number" },
+                  "quantity": { "type": "integer" },
+                  "flavor": { "type": "string" },
+                  "productId": { "type": "string" },
+                  "momentString": { "type": "string" },
+                  "max_quantity": { "type": "integer" },
+                  "step": { "type": "integer" }
+                },
+                "required": ["price", "quantity", "productId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Item adicionado ao carrinho" },
+          "401": { "description": "Identificadores do produto não detectado" } 
+        }
+      }
+    },
+    "/pay": {
+      "post": {
+        "summary": "Realizar pagamento",
+        "tags": ["Payment"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "paymentMethodId": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "token": { "type": "string" },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": { "type": "string", "example": "Pizza de Calabresa" },
+                          "quantity": { "type": "integer", "example": 2 },
+                          "unit_price": { "type": "number", "format": "float", "example": 45.50 }
+                        },
+                        "required": ["title", "quantity", "unit_price"]
+                      }
+                    }
+                  }
+                },
+                "required": ["paymentMethodId", "email", "token", "items"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Pagamento processado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "orderId": { "type": "string" },
+                    "status": { "type": "string" },
+                    "id": { "type": "string" },
+                    "payment_type": { "type": "string" },
+                    "qr_code": { "type": "string" },
+                    "qr_code_base64": { "type": "string" },
+                    "qr_code_link": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Erro interno ao processar pagamento" }
+        }
+      }
+    },
+    "/user/signup": {
+      "post": {
+        "summary": "Registra um novo usuário e retorna um token de autenticação",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserSignup" }
+            }
+          }
+        },
+        "responses": {
+          "201":  {
+            "description": "Usuário criado com sucesso. Token JWT retornado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "Token JWT para autenticação",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    }
+                  }
+                }
+              }
+            }
+          },
+        "403": { "description": "Cliente já cadastrado" }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "summary": "Login de usuário",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserLogin" }
+            }
+          }
+        },
+        "responses": {
+          "200":  {
+            "description": "Login bem sucedido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "Token JWT para autenticação",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    }
+                  }
+                }
+              }
+            }
+          },
+        "404": { "description": "Usuário não encontrado, verifique suas credenciais" }
+        }
+      }
+    },
+    "/user/address": {
+      "patch": {
+        "summary": "Atualizar endereço do usuário",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticação",
+            "schema": { "type": "string", "example": "Bearer SEU_TOKEN_AQUI" }
+          }
+        ],
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserAddress" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Endereço alterado" },
+          "500": { "description": "Erro ao alterar endereço" }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "summary": "Buscar cliente registrado",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticação",
+            "schema": { "type": "string", "example": "Bearer SEU_TOKEN_AQUI" }
+          }
+        ],
+        "tags": ["Users"],
+        "responses": {
+          "200": {
+            "description": "Dados do usuário",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/User" }
+              }
+            }
+          },
+          "404": { "description": "Cliente encontrado" }
+        }
+      },
+      "patch": {
+        "summary": "Atualizar dados do usuário",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticação",
+            "schema": { "type": "string", "example": "Bearer SEU_TOKEN_AQUI" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Dados do cliente atualizados" },
+          "404": { "description": "Cliente não encontrado" }
+        }
+      }
+    },
+    "/client/{id}": {
+      "get": {
+        "summary": "Buscar cliente pelo ID",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID do cliente",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticação",
+            "schema": { "type": "string", "example": "Bearer SEU_TOKEN_AQUI" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente encontrado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/User" }
+              }
+            }
+          },
+          "404": { "description": "Cliente encontrado" }
+        }
+      }
+    },
+    "/step-qnt_max/{id}": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Retorna a quantidade máxima e total do produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do produto",
+            "schema": {
+              "type": "string",
+              "example": "427e7ada-1d00-4f05-9b07-94265b8a02ff"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticação",
+            "schema": {
+              "type": "string",
+              "example": "Bearer SEU_TOKEN_AQUI"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quantidade máxima e total do produto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "maxStep": { "type": "integer", "example": 1 },
+                    "total_quantity": { "type": "integer", "example": 0 }
+                  },
+                  "required": ["maxStep", "total_quantity"]
+                }
+              }
+            }
+          },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/product/{id}": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Retorna os detalhes de um produto pelo ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID do produto"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do produto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string", "example": "427e7ada-1d00-4f05-9b07-94265b8a02ff" },
+                    "product": { "type": "string", "example": "X- EGG" },
+                    "price": { "type": "string", "example": "9.00" },
+                    "quantity": { "type": "integer", "example": 1 },
+                    "total": { "type": "string", "example": "9.00" },
+                    "description": { "type": "string", "example": "Carne, Queijo, Ovo, e Salada" },
+                    "category": { "type": "string", "example": "lanche" },
+                    "image": { "type": "string", "example": "x-egg.png" }
+                  },
+                  "required": ["id", "product", "price", "quantity", "total", "description", "category", "image"]
+                }
+              }
+            }
+          },
+          "404": { "description": "Produto não encontrado" }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Retorna a lista de todos os produtos",
+        "responses": {
+          "200": {
+            "description": "Lista de produtos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string", "example": "427e7ada-1d00-4f05-9b07-94265b8a02ff" },
+                      "product": { "type": "string", "example": "X- EGG" },
+                      "price": { "type": "string", "example": "9.00" },
+                      "quantity": { "type": "integer", "example": 1 },
+                      "total": { "type": "string", "example": "9.00" },
+                      "description": { "type": "string", "example": "Carne, Queijo, Ovo, e Salada" },
+                      "category": { "type": "string", "example": "lanche" },
+                      "image": { "type": "string", "example": "x-egg.png" }
+                    },
+                    "required": ["id", "product", "price", "quantity", "total", "description", "category", "image"]
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Erro ao buscar produtos" }
+        }
+      }
+    },
+    "/products/cart": {
+      "get": {
+        "summary": "Listar carrinho do cliente",
+        "tags": ["Cart"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticação",
+            "schema": { "type": "string", "example": "Bearer SEU_TOKEN_AQUI" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produtos no carrinho",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/CartItem" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/orders": {
+      "get": {
+        "summary": "Listar pedidos de todos os clientes",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticação",
+            "schema": { "type": "string", "example": "Bearer SEU_TOKEN_AQUI" }
+          }
+        ],
+        "tags": ["Orders"],
+        "responses": {
+          "200": {
+            "description": "Lista de pedidos agrupados por produto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "product": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string", "example": "91dc238b-a103-4471-affb-da5f8bc55a9b" },
+                          "product": { "type": "string", "example": "PIZZA GRANDE + REFRIGERANTE 1L" },
+                          "price": { "type": "string", "example": "34.99" },
+                          "quantity": { "type": "integer", "example": 1 },
+                          "total": { "type": "string", "example": "34.99" },
+                          "client": { "type": "string", "example": "884eed24-bc53-4508-8b59-d4bc979a2e5a" },
+                          "product_id": { "type": "string", "example": "cf3bd779-fa03-4a53-be3e-233b02cd586d" },
+                          "category": { "type": "string", "example": "pizza" },
+                          "moment": { "type": "string", "example": "09/09/2025 às 15:15" },
+                          "status": { "type": "string", "example": "Pendente" }
+                        }
+                      },
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": { "type": "string", "example": "ece66256-6130-42a0-8528-f0990f63b143" },
+                            "price": { "type": "string", "example": "0.00" },
+                            "quantity": { "type": "integer", "example": 1 },
+                            "flavor": { "type": "string", "example": "BACON" },
+                            "total": { "type": "string", "example": "0.00" },
+                            "product_id": { "type": "string", "example": "cf3bd779-fa03-4a53-be3e-233b02cd586d" },
+                            "client": { "type": "string", "example": "884eed24-bc53-4508-8b59-d4bc979a2e5a" },
+                            "max_quantity": { "type": "integer", "example": 2 },
+                            "step": { "type": "integer", "example": 1 },
+                            "moment": { "type": "string", "example": "09/09/2025 às 15:15" },
+                            "status": { "type": "string", "example": "Pendente" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Seu carrinho ainda está vazio. Sinta-se à vontade para escolher seus produtos e fazer seus pedidos" }
+        }
+      }
+    },
+    "/cart/product/{id}": {
+      "get": {
+        "summary": "Buscar produto no carrinho pelo ID",
+        "tags": ["Cart"],
+        "parameters": [
+          {
+            "name": "id", 
+            "description": "ID do produto",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto encontrado no carrinho",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CartItem" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Atualizar quantidade de produto no carrinho",
+        "tags": ["Cart"],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID do produto",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "quantity": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Quantidade atualizada" }
+        }
+      }
+    },
+    "/payment-status/{id}": {
+      "get": {
+        "summary": "Status do pagamento",
+        "tags": ["Payment"],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "ID do pagamento enviado pelo Mercado Pago",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status do pagamento retornado",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/flavors/{id}": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Retorna os sabores do pedido do cliente",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do cliente",
+            "schema": { "type": "string", "example": "6fba84a9-7b3d-4f94-b208-b69064219b19" }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticação",
+            "schema": { "type": "string", "example": "Bearer SEU_TOKEN_AQUI" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de sabores do pedido do cliente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string", "example": "427e7ada-1d00-4f05-9b07-94265b8a02ff" },
+                      "flavor": { "type": "string", "example": "Calabresa" },
+                      "price": { "type": "number", "example": 12.0 },
+                      "ingredients": { "type": "string", "example": "Calabresa, Queijo" },
+                      "max_quantity": { "type": "integer", "example": 2 },
+                      "total": { "type": "number", "example": 24.0 },
+                      "product_id": { "type": "string", "example": "4ae66e3a-39fd-44e1-93c5-4da0f6adf2a9" },
+                      "step": { "type": "integer", "example": 1 },
+                      "quantity": { "type": "integer", "example": 2 },
+                      "subtitle": { "type": "string", "example": "Sabor adicional" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Somente para usuário administrador" }
+        }
+      }
+    },
+    "/products/flavors": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Listar sabores de produtos no pedido",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticação",
+            "schema": { "type": "string", "example": "Bearer SEU_TOKEN_AQUI" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de sabores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Flavor" }
+                }
+              }
+            }
+          },
+          "404": { "description": "Seu carrinho ainda está vazio. Sinta-se à vontade para escolher seus produtos e fazer seus pedidos" }
+        }
+      }
+    },
+    "/update_qnt/": {
+      "patch": {
+        "summary": "Atualizar quantidade de sabor no carrinho",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticação",
+            "schema": { "type": "string", "example": "Bearer SEU_TOKEN_AQUI" }
+          }
+        ],
+        "tags": ["Cart"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "flavor": { "type": "string" },                  
+                  "product_id": { "type": "string" },
+                  "max_quantity": { "type": "integer" },                  
+                  "step": { "type": "integer" },                  
+                  "quantity": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Quantidade atualizada" },
+          "401": { "description": "Algum(ns) dado(s) da requisição está(ão) penddente(s)" }
+        }
+      }
+    },
+    "/del-user": {
+      "delete": {
+        "summary": "Deletar conta do usuário",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticação",
+            "schema": { "type": "string", "example": "Bearer SEU_TOKEN_AQUI" }
+          }
+        ],
+        "tags": ["Users"],
+        "responses": {
+          "200": { "description": "Conta removida com sucesso" },
+          "404": { "description": "Cliente não encontrado" }
+        }
+      }
+    },
+    "/orders": {
+      "delete": {
+        "summary": "Excluir pedido do cliente",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token de autenticação",
+            "schema": { "type": "string", "example": "Bearer SEU_TOKEN_AQUI" }
+          }
+        ],
+        "tags": ["Orders"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": { "type": "string" },
+                  "productId": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Pedido excluído com sucesso" },
+          "500": { "description": "Erro interno do servidor"}
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Flavor": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "flavor": { "type": "string" },
+          "price": { "type": "number" },
+          "ingredients": { "type": "string" },
+          "max_quantity": { "type": "integer" },
+          "total": { "type": "number" },
+          "product_id": { "type": "string" },
+          "step": { "type": "integer" },
+          "quantity": { "type": "integer" },
+          "subtitle": { "type": "string" }
+        }
+      },
+      "CartItem": {
+        "type": "object",
+        "properties": {
+          "productId": { "type": "string" },
+          "flavor": { "type": "string" },
+          "quantity": { "type": "integer" },
+          "price": { "type": "number" },
+          "total": { "type": "number" }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "phone": { "type": "string" },
+          "role": { "type": "string" },
+          "user": { "type": "string" },
+          "email": { "type": "string" },
+          "street": { "type": "string" },
+          "cep": { "type": "string" },
+          "neighborhood": { "type": "string" },
+          "complement": { "type": "string" }
+        }
+      },
+      "UserSignup": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "phone": { "type": "string" },
+          "senha": { "type": "string" }
+        },
+        "required": ["name", "email", "password"]
+      },
+      "UserLogin": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "senha": { "type": "string" }
+        },
+        "required": ["email", "password"]
+      },
+      "UserUpdate": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string" },
+          "email": { "type": "string" },
+          "phone": { "type": "string" }
+        }
+      },
+      "UserAddress": {
+        "type": "object",
+        "properties": {
+          "street": { "type": "string" },
+          "cep": { "type": "string" },
+          "neighborhood": { "type": "string" },
+          "complement": { "type": "string" }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "price": { "type": "number" }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "orderId": { "type": "string" },
+          "status": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CartItem" }
+          }
+        }
+      }
+    }
+  }
+}

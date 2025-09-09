@@ -16,7 +16,7 @@ export default class CartController{
 
             await this.cartBusiness.insertInCart(req)
 
-            res.status(201).end()
+            res.status(201).send('Item adicionado ao carrinho')
         }catch(e:any){
             let statusCode = e.statusCode || 400    
             let message = e.error === undefined ? e.message : e.error.message

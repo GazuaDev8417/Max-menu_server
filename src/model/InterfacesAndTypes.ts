@@ -8,19 +8,6 @@ export interface ProductModel{
     total:number
 }
 
-export interface FlavorModel{
-    id:string		
-    flavor:string		
-    price:number		
-    ingredients:string	
-    max_quantity:number
-    total:number		
-    product_id:string
-    step:number		
-    quantity:number
-    subtitle:string
-}
-
 export interface ClientModel{
     id:string
     client:string
@@ -66,6 +53,19 @@ export interface ProductCartModel{
     client:string
     product_id:string
     category:string
+}
+
+export interface FlavorModel{
+    id:string		
+    flavor:string		
+    price:number		
+    ingredients:string	
+    max_quantity:number
+    total:number		
+    product_id:string
+    step:number		
+    quantity:number
+    subtitle:string
 }
 
 export interface GroupedProduct{
