@@ -1,8 +1,5 @@
 import express from 'express'
 import cors from 'cors'
-import swaggerUi from 'swagger-ui-express'
-import path from 'path'
-import fs from 'fs'
 import { config } from 'dotenv'
 
 
@@ -12,10 +9,6 @@ config()
 const PORT = process.env.PORT || 3003
 export const app = express()
 app.use(express.json())
-
-const swaggerPath = path.join(__dirname, './swagger.json')
-const swaggerDocument = JSON.parse(fs.readFileSync(swaggerPath, "utf-8"))
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 
 const allowedOrigins = [
@@ -46,5 +39,4 @@ app.use(cors({
 
 app.listen(PORT, ()=>{
     console.log(`Servidor rodando em http://localhost:${PORT}`)
-    console.log(`Documentação disponível em http://localhost:${PORT}/api-docs`)
 })
