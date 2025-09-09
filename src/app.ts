@@ -19,7 +19,8 @@ const allowedOrigins = [
   'http://10.23.1.19:5173',
   'http://10.23.1.14:5173',
   'https://max-menu.vercel.app',
-  'https://admuser.onrender.com'
+  'https://admuser.onrender.com',
+  'https://e-commerce-website-7uq3.onrender.com'
 ]
 
 app.use(cors({
