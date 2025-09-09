@@ -41,6 +41,7 @@ app.post('/insert_in_cart', cartController.insertInCart)
 //app.post('/cart_product', cartController.checkProductsFromCart)
 app.post('/pay', cartController.pay)
 
+
 //app.post('/regist/client', clientController.registClient)
 app.post('/user/signup', clientController.registUser)
 app.post('/user/login', clientController.loginUser)
@@ -64,9 +65,12 @@ app.get('/products/cart', productCntroller.getCartByClient)
 app.get('/clients/orders', clientController.productsOnOrderByClients)
 
 app.get('/cart/product/:id', cartController.cartProductById)
-
-app.get('/products/flavors', cartController.productsOnOrder)
+app.get('/payment-status/:id', cartController.paymentStatus)
 app.get('/products/flavors/:id', cartController.productsOnOrderByClient)
+app.get('/products/flavors', cartController.productsOnOrder)
+
+
+//app.get('/finised_orders', cartController.finishOrderProducts)
 
 
 //app.get('/flavors_step2/:id', productCntroller.flavorsByProductStep2)
@@ -85,3 +89,4 @@ app.patch('/update_qnt/', cartController.updateFlavorQntFromCart)
 //app.delete('/client/order/:id', clientController.removeClientOrder)
 app.delete('/del-user', clientController.deleteAccount)
 
+app.delete('/orders', productCntroller.deleteOrder)

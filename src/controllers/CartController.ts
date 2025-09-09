@@ -63,6 +63,19 @@ export default class CartController{
         }
     }
 
+    /* finishOrderProducts = async(req:Request, res:Response):Promise<void>=>{
+        try{
+
+            const products = await this.cartBusiness.finishOrderProducts(req)
+
+            res.status(200).send(products)
+        }catch(e:any){
+            let statusCode = e.statusCode || 400
+            let message = e.error === undefined ? e.message : e.error.message
+            res.status(statusCode).send(message || e.sqlMessage)
+        }
+    } */
+
     productsOnOrderByClient = async(req:Request, res:Response):Promise<void>=>{
         try{
 
@@ -116,7 +129,6 @@ export default class CartController{
 
     pay = async(req:Request, res:Response):Promise<void>=>{
         try{
-            console.log(req.body)
             const response = await this.cartBusiness.pay(req)
             res.status(200).json({
                 orderId: response.data.external_reference,
@@ -128,6 +140,18 @@ export default class CartController{
                 qr_code_link: response.data.point_of_interaction?.transaction_data?.ticket_url
                             || response.data.point_of_interaction?.transaction_data?.qr_code_link
             })
+        }catch(e:any){
+            let statusCode = e.statusCode || 400
+            let message = e.error === undefined ? e.message : e.error.message
+            res.status(statusCode).send(message || e.sqlMessage)
+        }
+    }
+    
+    paymentStatus = async(req:Request, res:Response):Promise<void>=>{
+        try{
+            const response = await this.cartBusiness.paymentStatus(req)
+
+            res.status(200).json({ status: response })
         }catch(e:any){
             let statusCode = e.statusCode || 400
             let message = e.error === undefined ? e.message : e.error.message

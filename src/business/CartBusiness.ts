@@ -103,6 +103,22 @@ export default class CartBusiness{
         return products
     }
 
+    /* finishOrderProducts = async(req:Request):Promise<GroupedProduct[]>=>{
+        const client = (await new Authentication().authToken(req)).id
+        const products = await this.cartData.finishOrderProducts(client)
+
+        if(products.length === 0){
+            throw{
+                statusCode: 404,
+                error: new Error(
+                    'Seu carrinho está vazio'
+                )
+            }
+        }
+
+        return products
+    } */
+
     productsOnOrderByClient = async(req:Request):Promise<GroupedProduct[]>=>{
         const user = await new Authentication().authToken(req)
 
@@ -266,5 +282,25 @@ export default class CartBusiness{
                 error: e.message || 'Erro interno ao processar pagamento'
             }
         }     
+    }
+
+    paymentStatus = async(req:Request):Promise<string>=>{
+        const { id } = req.params
+
+        try{
+            
+            const res = await axios.get(`https://api.mercadopago.com/v1/payments/${id}`, {
+                headers: { Authorization: `Bearer ${process.env.ACCESS_TOKEN_TP}` }
+            })
+
+            const data = await res.data
+            return data.status                       
+        }catch(e:any){
+            if(e.response){
+                return e.response.status
+            }else{
+                throw new Error(e.message)
+            }
+        }
     }
 }

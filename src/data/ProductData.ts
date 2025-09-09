@@ -235,4 +235,18 @@ export default class ProductData extends Connexion{
             throw new Error(`Erro ao buscar produtos: ${e}`)
         }
     }
+
+
+    deleteOrder = async(client:string, productId:string):Promise<void>=>{
+        try{
+            await Connexion.con(this.PRODUCTCART_TABLE)
+                .where({ client, product_id: productId })
+                .del()
+            await Connexion.con(this.CART_TABLE)
+                .where({ client, product_id: productId })
+                .del()
+        }catch(e:any){
+            throw new Error(e)
+        }
+    }
 }

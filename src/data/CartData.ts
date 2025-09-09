@@ -72,6 +72,45 @@ export default class CartData extends Connexion{
             throw new Error(e.message || e)
         }
     }
+    
+    /* finishOrderProducts = async(client:string):Promise<GroupedProduct[]>=>{
+        try{
+
+            const flavors:FlavorModel[] = await Connexion.con(this.CART_TABLE)
+                .where({ client, status: 'Concluído' })
+                
+            const products:ProductCartModel[] = await Connexion.con(this.PRODUCTSCART_TABLE)
+                .where({ client, status: 'Concluído' })
+                
+            const groupedByProduct: Record<string, FlavorModel[]> = flavors.reduce(
+                (acc, item)=>{
+                    if(!acc[item.product_id]){
+                        acc[item.product_id] = []
+                    }
+                    acc[item.product_id].push(item)
+                    return acc
+                },
+                {} as Record<string, FlavorModel[]>
+            )  
+
+            const groupedWithProductInfo:GroupedProduct[] = products.map(product=>{
+                if(product.category === 'bebida'){
+                    return{
+                        product,
+                        items:[]
+                    }
+                }
+                return{
+                    product,
+                    items: (groupedByProduct[product.product_id] || []).sort((a, b) => a.flavor.localeCompare(b.flavor))
+                }                
+            }).sort((a, b) => a.product.product.localeCompare(b.product.product))
+            
+            return groupedWithProductInfo
+        }catch(e:any){
+            throw new Error(e.message || e)
+        }
+    } */
 
     productsOnOrderByClient = async(client:string):Promise<GroupedProduct[]>=>{
         try{

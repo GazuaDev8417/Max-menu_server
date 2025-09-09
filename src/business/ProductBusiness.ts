@@ -192,4 +192,10 @@ export default class ProductBusiness{
 
         return products
     }
+
+
+    deleteOrder = async(req:Request):Promise<void>=>{
+        const { userId, productId } = req.body
+        await this.productData.deleteOrder(userId, productId)
+    }
 }

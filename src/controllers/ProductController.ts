@@ -171,5 +171,18 @@ export default class ProductController{
             res.status(statusCode).send(message || e.sqlMessage)
         }
     }
+
+    deleteOrder = async(req:Request, res:Response):Promise<void>=>{
+        try{
+
+            await this.productBusiness.deleteOrder(req)
+
+            res.status(200).send('Pedido excluído com sucesso')
+        }catch(e:any){
+            let statusCode = e.statusCode || 400    
+            let message = e.error === undefined ? e.message : e.error.message
+            res.status(statusCode).send(message || e.sqlMessage)
+        }
+    }
     
 }
