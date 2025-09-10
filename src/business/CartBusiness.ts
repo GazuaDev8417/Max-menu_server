@@ -54,7 +54,7 @@ export default class CartBusiness{
             await this.productData.insertInProductCart(newCartProd)
         }
 
-        if(productToCart.category === 'bebida') return
+        if(productToCart.category === 'bebida' || productToCart.category === 'porcao') return
 
         const newCart = new Cart(
             v4(),
