@@ -11,18 +11,8 @@ export const app = express()
 app.use(express.json())
 
 
-const allowedOrigins = [
-  'http://127.0.0.1:5500', 
-  'http://localhost:5500', 
-  'http://localhost:5173', 
-  'http://10.23.1.19:5500',
-  'http://10.23.1.19:5173',
-  'http://10.23.1.14:5500',
-  'http://10.23.1.14:5173',
-  'https://max-menu.vercel.app',
-  'https://admuser.onrender.com',
-  'https://e-commerce-website-7uq3.onrender.com'
-]
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || []
+
 
 app.use(cors({
   origin: (origin, callback) => {
