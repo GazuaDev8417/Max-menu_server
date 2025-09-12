@@ -1,5 +1,4 @@
 import Connexion from "./Connexion"
-//import Product from "../model/Product"
 import Flavor from "../model/Flavor"
 import { ProductModel, FlavorModel, ProductCartModel } from "../model/InterfacesAndTypes"
 import ProductCart from "../model/Product_cart"
@@ -12,16 +11,6 @@ export default class ProductData extends Connexion{
     protected FLAVORS_TABLE = 'flavors'
     protected CART_TABLE = 'cart'
     
-
-    /* registProducts = async(product:Product):Promise<void>=>{
-        try{
-            
-            await product.save()
-
-        }catch(e:any){
-            throw new Error(`Erro ao registrar produto: ${e}`)
-        }
-    } */
 
     insertInProductCart = async(product:ProductCart):Promise<void>=>{
         try{
@@ -172,19 +161,6 @@ export default class ProductData extends Connexion{
             throw new Error(`Erro ao remover produto: ${e}`)
         }
     }
-
-    /* removeProductFromCartByClient = async(client:string):Promise<void>=>{
-        try{
-
-            await Connexion.con(this.PRODUCTCART_TABLE).del()
-                .where({ client })
-            await Connexion.con(this.CART_TABLE).del()
-                .where({ client })
-                
-        }catch(e:any){
-            throw new Error(`Erro ao remover produto: ${e}`)
-        }
-    } */
 
     updateProductQntFromCart = async(id:string, quantity:number, product:ProductCartModel):Promise<void>=>{
         try{

@@ -53,7 +53,7 @@ export default class ClientBusiness{
         return token
     }
     
-    loginUser = async(req:Request):Promise<string>=>{
+    loginUser = async(req:Request):Promise<{ token:string, role:string }>=>{
         const { email, senha } = req.body
         
         if(!email || !senha){
@@ -80,7 +80,7 @@ export default class ClientBusiness{
         }
 
         const token = new Authentication().token(user.id)
-        return token        
+        return { token, role: user.role }       
     }
 
     userById = async(req:Request):Promise<UserModel>=>{
@@ -91,6 +91,7 @@ export default class ClientBusiness{
 
     clientById = async(req:Request):Promise<UserModel>=>{
         const user = await new Authentication().authToken(req)
+        
         if(user.role !== 'ADM'){
             throw{
                 statusCode: 403,

@@ -7,34 +7,7 @@ export default class ProductController{
     constructor(
         private productBusiness:ProductBusiness
     ){}
-
-    /* registProducts = async(req:Request, res:Response):Promise<void>=>{
-        try{
-
-            await this.productBusiness.registProducts(req)
-
-            res.status(201).send('Produto registrado com sucesso')
-        }catch(e:any){
-            let statusCode = e.statusCode || 400    
-            let message = e.error === undefined ? e.message : e.error.message
-            res.status(statusCode).send(message || e.sqlMessage)
-        }
-    } */
-
-
-    /* insertInProductCart = async(req:Request, res:Response):Promise<void>=>{
-        try{
-
-            await this.productBusiness.insertInProductCart(req)
-
-            res.status(201).send('Produto inserido no carrinho')
-        }catch(e:any){
-            let statusCode = e.statusCode || 400    
-            let message = e.error === undefined ? e.message : e.error.message
-            res.status(statusCode).send(message || e.sqlMessage)
-        }
-    } */
-
+    
 
     getProductById = async(req:Request, res:Response):Promise<void>=>{
         try{
@@ -76,61 +49,6 @@ export default class ProductController{
             res.status(statusCode).json({ message: message || e.sqlMessage })
         }
     }
-
-
-    /* removeProductFromCart = async(req:Request, res:Response):Promise<void>=>{
-        try{
-
-            await this.productBusiness.removeProductFromCart(req)
-
-            res.status(200).end()
-        }catch(e:any){
-            let statusCode = e.statusCode || 400    
-            let message = e.error === undefined ? e.message : e.error.message
-            res.status(statusCode).json({ message: message || e.sqlMessage })
-        }
-    } */
-
-    /* removeProductFromCartByClient = async(req:Request, res:Response):Promise<void>=>{
-        try{
-
-            await this.productBusiness.removeProductFromCartByClient(req)
-
-            res.status(200).end()
-        }catch(e:any){
-            let statusCode = e.statusCode || 400    
-            let message = e.error === undefined ? e.message : e.error.message
-            res.status(statusCode).json({ message: message || e.sqlMessage })
-        }
-    } */
-
-
-    /* flavorsByProductStep2 = async(req:Request, res:Response):Promise<void>=>{
-        try{
-
-            const flavors = await this.productBusiness.flavorsByProductStep2(req)
-
-            res.status(200).send(flavors)
-        }catch(e:any){
-            let statusCode = e.statusCode || 400    
-            let message = e.error === undefined ? e.message : e.error.message
-            res.status(statusCode).send(message || e.sqlMessage)
-        }
-    } */
-
-
-    /* updateFlavorsQntStep2 = async(req:Request, res:Response):Promise<void>=>{
-        try{
-
-            await this.productBusiness.updateFlavorsQntStep2(req)
-
-            res.status(200).end()
-        }catch(e:any){
-            let statusCode = e.statusCode || 400    
-            let message = e.error === undefined ? e.message : e.error.message
-            res.status(statusCode).send(message || e.sqlMessage)
-        }
-    } */
 
 
     verifyMaxQnt = async(req:Request, res:Response):Promise<void>=>{
@@ -183,6 +101,5 @@ export default class ProductController{
             let message = e.error === undefined ? e.message : e.error.message
             res.status(statusCode).send(message || e.sqlMessage)
         }
-    }
-    
+    }    
 }

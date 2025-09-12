@@ -233,6 +233,7 @@ export default class CartBusiness{
 
     pay = async(req:Request)=>{
         try{
+            console.log(req.body)
             const { paymentMethodId, email, token, items } = req.body
             const orderId = `${email}-${Date.now()}`
             const transaction_amount = items.reduce(
